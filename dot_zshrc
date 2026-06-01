@@ -129,19 +129,35 @@ export PROJECTS=~/projects
 alias cdp='cd $PROJECTS'
 alias cdpgr='cd $PROJECTS/github.com/rdalbuquerque'
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Local user bin
+export PATH="$PATH:$HOME/.local/bin"
 
+# Homebrew (load only if installed; supports linuxbrew and macOS locations)
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# NVM (load only if installed)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 
-PATH=$PATH:/home/rods/.local/bin
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Vagrant Windows access (only relevant under WSL)
+if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+  export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+fi
 
-source <(kubectl completion zsh)
-alias k='kubectl'
-alias kadmin='kubectl --kubeconfig ~/.kube/config-admin'
+# Go
+[ -d /usr/local/go/bin ] && export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:$HOME/go/bin"
 
-export PATH=$PATH:/usr/local/go/bin:/home/rods/go/bin
+# kubectl (completion + aliases only if installed)
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion zsh)
+  alias k='kubectl'
+  alias kadmin='kubectl --kubeconfig ~/.kube/config-admin'
+fi
+
 export AZDO_PERSONAL_ACCESS_TOKEN=""

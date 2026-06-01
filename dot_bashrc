@@ -8,6 +8,13 @@ case $- in
       *) return;;
 esac
 
+# Hand off interactive bash sessions to zsh (e.g. terminals that launch bash
+# directly). Guarded so it never affects non-interactive shells or loops.
+if [ -z "$ZSH_VERSION" ] && [ -z "$NO_ZSH_SWITCH" ] && command -v zsh >/dev/null 2>&1; then
+    export SHELL="$(command -v zsh)"
+    exec zsh
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
