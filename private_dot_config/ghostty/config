@@ -1,0 +1,23 @@
+# Ghostty configuration (managed by chezmoi)
+# Docs: https://ghostty.org/docs/config
+
+# Theme — matches the tmux dracula setup. `ghostty +list-themes` for more.
+theme = Dracula
+
+# Font — left to Ghostty's built-in JetBrains Mono Nerd Font (the default),
+# which renders spaceship/dracula glyphs without installing anything.
+# Set font-family here only if you install a specific font system-wide.
+font-size = 12
+
+# Shell is intentionally NOT hardcoded: Ghostty uses your login shell (zsh,
+# set via chsh), so this stays portable across machines and OSes.
+
+# Window
+window-padding-x = 8
+window-padding-y = 8
+background-opacity = 0.96
+
+# Behavior
+mouse-hide-while-typing = true
+confirm-close-surface = false
+copy-on-select = clipboard
